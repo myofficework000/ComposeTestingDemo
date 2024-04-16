@@ -53,13 +53,11 @@ fun RegistrationPreview() {
 
 @Composable
 fun RegistrationForm(
-    modifier: Modifier = Modifier,
     onRegister: () -> Unit
 ) {
     Box(
         Modifier
-            .fillMaxSize()
-            .then(modifier),
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -68,7 +66,7 @@ fun RegistrationForm(
         ) {
 
             Text(
-                modifier = Modifier.testTag("Register"),
+                modifier = Modifier.testTag("RegisterLabel"),
                 text = "Register",
                 fontSize = 32.sp,
                 color = Color.Blue,
@@ -98,7 +96,7 @@ fun RegistrationForm(
             SpacerSmall()
 
             //register button
-            SimpleTextButton("Register", modifier = Modifier.testTag("Register button")) {
+            SimpleTextButton("Register", modifier = Modifier.testTag("RegisterButton")) {
                 onRegister
             }
         }
@@ -178,7 +176,8 @@ fun UserTextField() {
         value = username.value,
         leadingIcon = { Icon(imageVector = Icons.Default.Person, contentDescription = "userIcon") },
         onValueChange = { username.value = it },
-        label = { Text(text = "Username") }
+        label = { Text(text = "Username") },
+        modifier = Modifier.testTag("username")
     )
 }
 
@@ -194,7 +193,8 @@ fun EmailTextField() {
             validateEmail(email = it)
         },
         isError = isEmailValid.value,
-        label = { Text(text = "Email") }
+        label = { Text(text = "Email") },
+        modifier = Modifier.testTag("email")
     )
 }
 
@@ -209,6 +209,7 @@ fun ConfirmPasswordTextField() {
         },
         isError = isConfirmPasswordInvalid.value,
         label = { Text(text = "Confirm Password") },
+        modifier = Modifier.testTag("confirmPassword")
     )
 }
 
@@ -281,7 +282,8 @@ fun TextFieldWithNumbers() {
         ),
         onValueChange = { text = it },
         leadingIcon = { Icon(imageVector = Icons.Default.Phone, contentDescription = "phoneIcon") },
-        label = { Text(text = "Mobile Number") }
+        label = { Text(text = "Mobile Number") },
+        modifier = Modifier.testTag("mobile")
     )
 }
 
@@ -296,6 +298,7 @@ private fun PasswordTextField() {
         leadingIcon = { Icon(imageVector = Icons.Default.Lock, contentDescription = "lockIcon") },
         onValueChange = { password = it },
         label = { Text(text = "Password") },
+        modifier = Modifier.testTag("password")
     )
 }
 
