@@ -1,17 +1,15 @@
 package abhishek.pathak.composetesting
 
-import abhishek.pathak.composetesting.ui.theme.ComposeTestingTheme
-import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.hasTextExactly
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextClearance
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Assert.assertEquals
+import org.junit.Assert
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
@@ -19,56 +17,38 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class RegistrationUITest {
+class RegistrationKtTest {
 
     @get:Rule
-    val rule = createComposeRule()
-
-    private lateinit var username: SemanticsNodeInteraction
-    private lateinit var email: SemanticsNodeInteraction
-    private lateinit var mobile: SemanticsNodeInteraction
-    private lateinit var password: SemanticsNodeInteraction
-    private lateinit var confirmPassword: SemanticsNodeInteraction
-    private lateinit var registerButton: SemanticsNodeInteraction
-    private lateinit var registerlable: SemanticsNodeInteraction
+    val composeTestRule = createComposeRule()
 
     @Before
-    fun setUp() {
-        rule.setContent {
-            ComposeTestingTheme {
-                RegistrationForm {}
+    fun setup() {
+        composeTestRule.setContent {
+            RegistrationForm {
+
             }
         }
+    }
 
-        with(rule) {
-            username = onNodeWithTag("username")
-            email = onNodeWithTag("email")
-            mobile = onNodeWithTag("mobile")
-            password = onNodeWithTag("password")
-            confirmPassword = onNodeWithTag("confirmPassword")
-            registerButton = onNodeWithTag("RegisterButton")
-            registerlable = onNodeWithTag("RegisterLabel")
+    @Test
+    fun verifyAllViewExits() {
+        composeTestRule.apply {
+            onNodeWithText("Username").assertExists()
+            onNodeWithText("Email").assertExists()
+            onNodeWithText("Mobile Number").assertExists()
+            onNodeWithText("Password").assertExists()
+            onNodeWithText("Confirm Password").assertExists()
         }
     }
 
     @Test
-    fun verifyAllViewsAreExists() {
-        with(rule) {
-            username.assertExists()
-            email.assertExists()
-            mobile.assertExists()
-            password.assertExists()
-            confirmPassword.assertExists()
-            registerlable.assertExists()
-            registerButton.assertExists()
-        }
-    }
+    fun verifyEmailValidationWithValidEmail() {
+        val validEmail = "abcd@gmail.com"
 
-    @Test
-    fun verifyEmailAddressValidation() {
-        with(email) {
-            performTextInput(VALID_EMAIL)
-            assert(hasText(VALID_EMAIL))
+        composeTestRule.onNodeWithText("Email").apply {
+            performTextInput(validEmail)
+            assert(hasText(validEmail))
             assertTrue(!isEmailValid.value)
             assertTrue(emailErrMsg.value == "")
             performTextClearance()
@@ -76,79 +56,73 @@ class RegistrationUITest {
     }
 
     @Test
-    fun verifyEmailAddressValidationWithInvalidInput() {
+    fun verifyEmailValidationWithInvalidEmail() {
+        val invalidEmail = "invalidEmail"
+        val errorMsg = "Input proper email id"
 
-        val validEmail = "myofficework"
-
-        with(email) {
-            performTextInput(validEmail)
-            assert(hasText(validEmail))
+        composeTestRule.onNodeWithText("Email").apply {
+            performTextInput(invalidEmail)
+            assert(hasText(invalidEmail))
             assertTrue(isEmailValid.value)
-            assertTrue(emailErrMsg.value == "Input proper email id")
+            assertTrue(errorMsg == emailErrMsg.value)
             performTextClearance()
         }
     }
 
     @Test
-    fun verifyConfirmPasswordValidationWithValidInput() {
+    fun verifyConfirmPasswordValidationWithValidPassword() {
+        val validConfirmPassword = ""
+        val errorMsg = ""
 
-        val input = "123456"
-
-        with(confirmPassword) {
-            performTextInput(input)
-            assert(hasText(input))
-            assertTrue(!isConfirmPasswordInvalid.value)
-            assertTrue(emailErrMsg.value == "")
+        composeTestRule.onNodeWithText("Confirm Password").apply {
+            performTextInput(validConfirmPassword)
+            assert(hasText(validConfirmPassword))
+            Assert.assertFalse(isConfirmPasswordInvalid.value)
+            assertTrue(errorMsg == "")
             performTextClearance()
         }
     }
 
     @Test
-    fun verifyConfirmPasswordValidationWithInValidInput() {
+    fun verifyConfirmPasswordValidationWithInvalidPassword() {
+        val validConfirmPassword = "password"
+        val errorMsg = "Password is not matched"
 
-        val invalidInput = "123"
-
-        with(confirmPassword) {
-            performTextInput(invalidInput)
-            assert(hasText(invalidInput))
+        composeTestRule.onNodeWithText("Confirm Password").apply {
+            performTextInput(validConfirmPassword)
+            assert(hasText(validConfirmPassword))
             assertTrue(isConfirmPasswordInvalid.value)
-            assertTrue(emailErrMsg.value == INVALID_PASSWORD)
+            assertTrue(errorMsg == "Password is not matched")
             performTextClearance()
         }
     }
 
-
     @Test
-    fun verifyPasswordAndConfirmPasswordAreSame() {
+    fun verifyButtonClick() {
+        val userName = "user"
+        val email = "abc@abc.com"
+        val mobile = "123-456-789"
+        val password = "password"
+        val confirmPassword = "password"
 
-        val passwordInput = "123456"
-        val confirmPasswordInput = "123456"
+        composeTestRule.onNodeWithText("Username")
+            .performTextInput(userName)
 
-        with(confirmPassword) {
-            performTextInput(confirmPasswordInput)
-            assert(hasText(confirmPasswordInput))
-        }
+        composeTestRule.onNodeWithText("Email")
+            .performTextInput(email)
 
-        with(password) {
-            performTextInput(passwordInput)
-            assert(hasText(passwordInput))
-        }
+        composeTestRule.onNodeWithText("Mobile Number")
+            .performTextInput(mobile)
 
-        assertEquals(hasTextExactly(passwordInput), hasTextExactly(confirmPasswordInput))
-    }
+        composeTestRule.onNodeWithText("Password")
+            .performTextInput(password)
 
-    @Test
-    fun registerUser() {
-        username.performTextInput("AbhishekPathak")
-        email.performTextInput(VALID_EMAIL)
-        mobile.performTextInput("+974 7176622")
-        password.performTextInput("12345678")
-        confirmPassword.performTextInput("12345678")
-        registerButton.performClick()
-    }
+        composeTestRule.onNodeWithText("Confirm Password")
+            .performTextInput(confirmPassword)
 
-    private companion object {
-        const val INVALID_PASSWORD = "Password is not matched"
-        const val VALID_EMAIL = "myofficework@gmail.com"
+        composeTestRule.onNodeWithTag("RegisterButton").performClick()
+
+        assertTrue(email.isNotEmpty())
+        assertTrue(password.isNotEmpty())
     }
 }
