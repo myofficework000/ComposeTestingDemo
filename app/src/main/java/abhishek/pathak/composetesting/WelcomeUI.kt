@@ -12,6 +12,7 @@ fun WelcomeScreen() {
     Box(modifier = Modifier.fillMaxSize()) {
         Button(onClick = { }) {
             Text(text = "Continue")
+            Text(text = "Continue")
         }
     }
 }
