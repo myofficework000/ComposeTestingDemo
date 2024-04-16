@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">ComposeTesting</string>
+    <string name="registration_success">Registration successful!</string>
+    <string name="registration_fail">Registration failed</string>
+    <string name="no_internet_connected">No internet connected!! \n</string>
+    <string name="try_again">Try again\n</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="no_internet">No Internet</string>
+    <string name="empty_login">Please check your email and password again!</string>
+    <string name="login_label">Login</string>
+    <string name="register_label">Register</string>
 </resources>
