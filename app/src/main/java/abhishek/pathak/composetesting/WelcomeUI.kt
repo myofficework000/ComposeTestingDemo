@@ -13,6 +13,7 @@ fun WelcomeScreen() {
         Button(onClick = { }) {
             Text(text = "Continue")
             Text(text = "Continue")
+            Text(text = "Continue")
         }
     }
 }
